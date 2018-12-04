@@ -1,0 +1,130 @@
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.sound.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bmoren/p5.collide2D@0.6/p5.collide2d.min.js"></script>
+</head>
+
+<body>
+    <div style="position: absolute; z-index: -3;">
+        <img src="./assets/karton.jpg" />
+    </div>
+    <!-- <script src="sketch.js"></script> -->
+    <script>
+        var mic;
+var cakes = [];
+let width = 900;
+let height = 500;
+let centerX = width / 2;
+let centerY = height / 2;
+let mokica;
+
+function setup() {
+    createCanvas(900, 500);
+
+    // Create an Audio input
+    mic = new p5.AudioIn();
+    mokica = new Mokica(centerX, centerY)
+    // start the Audio Input.
+    // By default, it does not .connect() (to the computer speakers)
+    mic.start();
+
+    cakes.push(new Cake(20, 20))
+
+}
+
+function draw() {
+    background(1, 1, 1);
+    // clear()
+
+    mokica.display()
+
+    //CAKES 
+    for (let i = 0; i < cakes.length; i++) {
+        let cake = cakes[i];
+        if (cake.shouldDie()) {
+            //Delete if dead
+            cakes.splice(i,1);
+        } else {
+            cake.move();
+            cake.display();
+        }
+    }
+
+    // Get the overall volume (between 0 and 1.0)
+    var vol = mic.getLevel();
+    fill(127);
+    stroke(0);
+
+    // Draw an ellipse with height based on volume
+    var h = map(vol, 0, 1, height, 0);
+    ellipse(width / 2, h - 25, 50, 50);
+}
+
+////////////////////////////////////////////////////////////////
+// Classes
+////////////////////////////////////////////////////////////////
+
+class Mokica {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    display() {
+        fill(123)
+        ellipse(this.x, this.y, 70)
+    }
+}
+
+class Cake {
+    constructor(x, y) {
+        this.startX = x;
+        this.startY = y;
+        this.x = x;
+        this.y = y;
+        this.lerpSpeed = 0.002;
+        this.isAlive = false;
+    }
+    display() {
+        fill(51)
+        ellipse(this.x, this.y, 30)
+    }
+    shouldDie() {
+        let passedHalf = collidePointEllipse(this.x, this.y, mokica.x, mokica.y, 70, 70)
+        if (passedHalf) {
+            return true;
+        }
+        return false
+    }
+    move() {
+        this.x = lerp(this.x, centerX + this.x + centerX, this.lerpSpeed)
+        this.y = lerp(this.y, centerY + this.y + centerY, this.lerpSpeed)
+    }
+}
+
+class AirBubble {
+
+}
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+
+            /* This centers our sketch horizontally. */
+            justify-content: center;
+
+            /* This centers our sketch vertically. */
+            align-items: center;
+        }
+    </style>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.sound.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/bmoren/p5.collide2D@0.6/p5.collide2d.min.js"></script>
+</head>
+
+<body>
+    <div style="position: absolute; z-index: -3;">
+        <img src="./assets/karton.jpg" />
+    </div>
+    <script src="sketch.js"></script>
+    <script>
+        let interval = setInterval(() => {
+            let element = document.getElementById('defaultCanvas0')
+            if (element != null) {
+                clearInterval(interval);
+                element.onmousedown = function () {
+                    return false;
+                };
+            }
+        }, 100)
+    </script>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+
+            /* This centers our sketch horizontally. */
+            justify-content: center;
+
+            /* This centers our sketch vertically. */
+            align-items: center;
+        }
+    </style>
+
+</body>
+
+</html>
