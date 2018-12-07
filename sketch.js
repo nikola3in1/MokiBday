@@ -23,6 +23,7 @@ let stage = "candle";
 //VARIABLES
 let lastSpawn = 0;
 let offset;
+let url_64="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS9kYWlseW1veC8=";
 //health bar
 let blink = {}
 let blinkFrames = 5;
@@ -44,6 +45,7 @@ function preload() {
     imports();
 }
 function setup() {
+    console.log('pls no hacking')
     let canvas = createCanvas(width, height);
     canvas.mousePressed(fire);
     //init spawn offset
@@ -64,7 +66,7 @@ function setup() {
     // blowedCakes = 24;
     // stage = "bossintro";
     // boss.health = 0
-    // stage = "endgame"
+    // stage = "msg"
 }
 
 function draw() {
@@ -118,9 +120,10 @@ function bossStage() {
     crossair.display()
 }
 function happyBirthday() {
-    drawMessage()
-    mokica.display()
+    drawMessage();
+    mokica.display();
     mokica.blow();
+    drawCredits()
 }
 
 ////////////////////////////////////////////////////////////////
@@ -148,7 +151,6 @@ function bossAnimation() {
 function drawCounter() {
     image(images['candle'], 7, 10, 40, 70)
     if (blowedCakes == 24) {
-        console.log("?asd")
         fill(color(244, 0, 0))
         stage = "bossintro"
     } else {
@@ -207,6 +209,21 @@ function drawFocus() {
     rect(0, height / 7 * 6, width, height / 7)
 }
 
+let credits = false;
+function drawCredits() {
+    textSize(60)
+    fill(0)
+    text("Credits", width - 150, height - 20)
+    if (credits){
+        textSize(40)
+        words = ["Game concept and programming by: Nikola M.", "Graphical design: ", "v1.0", "release date: 12.07.2018"]
+        text("Game concept and programming by:\nNikola M.",55,265)
+        text("Graphic design:\nNatalija B.",675,265)
+        text("v1.0",47,650)
+        text("release date: 12.07.2018",459,650)
+    }
+}
+
 ////////////////////////////////////////////////////////////////
 // Util
 ////////////////////////////////////////////////////////////////
@@ -219,6 +236,10 @@ function fire() {
                 cakes.splice(i, 1)
                 break;
             }
+        }
+    } else if (stage == "msg") {
+        if (collideRectCircle(867, 599, 400, 100, mouseX, mouseY, crossair.size)) {
+            credits = !credits;
         }
     } else {
         boss.health -= 10000
@@ -308,8 +329,6 @@ class Mokica {
         if (this.facing == "right") {
             x += 20;
         }
-
-
 
         let distance = dist(x, y, x2, y2)
         let ratio = length / distance;
@@ -468,7 +487,7 @@ class Mokica {
         }
         else {
             clear()
-            frame=0
+            frame = 0
             stage = "msg";
         }
     }
