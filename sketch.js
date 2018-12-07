@@ -6,9 +6,9 @@ let height = 683;
 let centerX = width / 2;
 let centerY = height / 2;
 //CONFIG
-let years = 24;
+let years = 23;
 let crossairSize = 35;
-let sensitivity = height * 1.3
+let sensitivity = height * 2
 var gravity = 1.5;
 //GAME OBJECTS AND DATA
 let mokica;
@@ -73,7 +73,7 @@ function draw() {
     background(1, 1, 1);
     clear()
 
-    if (blowedCakes < 24) {
+    if (blowedCakes < 23) {
         //First state
         candlesStage();
     } else if (stage == "bossintro") {
@@ -88,7 +88,6 @@ function draw() {
     }
 
 }
-
 
 ////////////////////////////////////////////////////////////////
 // States
@@ -150,7 +149,7 @@ function bossAnimation() {
 //SETTING STAGE HEREEEE
 function drawCounter() {
     image(images['candle'], 7, 10, 40, 70)
-    if (blowedCakes == 24) {
+    if (blowedCakes == years) {
         fill(color(244, 0, 0))
         stage = "bossintro"
     } else {
@@ -247,7 +246,7 @@ function fire() {
 }
 function spawnCakes() {
     let currTime = Date.now();
-    if (totalCakesSpawned < years && lastSpawn + offset < currTime) {
+    if (totalCakesSpawned <= years && lastSpawn + offset < currTime) {
         offset = random(400, 800);
         lastSpawn = Date.now() + offset;
         cakes.push(new Cake())
