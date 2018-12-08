@@ -23,7 +23,7 @@ let stage = "candle";
 //VARIABLES
 let lastSpawn = 0;
 let offset;
-let url_64="aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS9kYWlseW1veC8=";
+let url_64 = "aHR0cHM6Ly93d3cuaW5zdGFncmFtLmNvbS9kYWlseW1veC8=";
 //health bar
 let blink = {}
 let blinkFrames = 5;
@@ -86,7 +86,6 @@ function draw() {
     } else {
         happyBirthday();
     }
-
 }
 
 ////////////////////////////////////////////////////////////////
@@ -213,13 +212,13 @@ function drawCredits() {
     textSize(60)
     fill(0)
     text("Credits", width - 150, height - 20)
-    if (credits){
+    if (credits) {
         textSize(40)
         words = ["Game concept and programming by: Nikola M.", "Graphical design: ", "v1.0", "release date: 12.07.2018"]
-        text("Game concept and programming by:\nNikola M.",55,265)
-        text("Graphic design:\nNatalija B.",675,265)
-        text("v1.0",47,650)
-        text("release date: 12.07.2018",459,650)
+        text("Game concept and programming by:\nNikola M.", 55, 265)
+        text("Graphic design:\nNatalija B.", 675, 265)
+        text("v1.0", 47, 650)
+        text("release date: 12.07.2018", 459, 650)
     }
 }
 
@@ -227,12 +226,14 @@ function drawCredits() {
 // Util
 ////////////////////////////////////////////////////////////////
 function fire() {
-    if (stage == "candle") {
+    if (blowedCakes<years) {
+        stage="bossintro"
         for (let i = 0; i < cakes.length; i++) {
             const cake = cakes[i];
             let coll = collideCircleCircle(mouseX, mouseY, crossair.size, cake.hitbox['x'], cake.hitbox['y'], cake.hitbox['r'])
             if (coll) {
                 cakes.splice(i, 1)
+                blowedCakes++
                 break;
             }
         }
@@ -240,13 +241,14 @@ function fire() {
         if (collideRectCircle(867, 599, 400, 100, mouseX, mouseY, crossair.size)) {
             credits = !credits;
         }
-    } else {
-        boss.health -= 10000
+    } else if (stage == "bossstage") {
+        // boss.health -= 10000
+        mokica.attackBoss(10000);
     }
 }
 function spawnCakes() {
     let currTime = Date.now();
-    if (totalCakesSpawned <= years && lastSpawn + offset < currTime) {
+    if (totalCakesSpawned < years && lastSpawn + offset < currTime) {
         offset = random(400, 800);
         lastSpawn = Date.now() + offset;
         cakes.push(new Cake())
@@ -287,10 +289,10 @@ class Mokica {
         this.blowFrames = 0;
     }
 
-    attackBoss() {
+    attackBoss(dmg) {
         //dodaj dmg stats ako imas vreme
-        //DEV MODE
-        let blowPower = this.blow();
+        let blowPower = (dmg ? dmg : this.blow)
+        // let blowPower = this.blow();
         if (blowPower > sensitivity * boss.difficulty) {
             //Deal dmg
             boss.health -= blowPower;
@@ -483,11 +485,12 @@ class Mokica {
             image(images['switch'], 35, 427, 50, 80)
             image(images['mokica'], 87, 319);
             image(images['boss'], 483, 235);
+            stage = "bossstage";
         }
         else {
             clear()
             frame = 0
-            stage = "msg";
+            stage = "bossstage";
         }
     }
 
